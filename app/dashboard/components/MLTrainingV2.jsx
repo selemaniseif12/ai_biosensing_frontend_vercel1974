@@ -1,0 +1,70 @@
+"use client";
+import { useState } from "react";
+
+export default function MLTrainingV2() {
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+
+  async function runTraining() {
+    setError(null);
+    setResult(null);
+
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/dashboard/ml/train/v2`;
+
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        let errMsg = "Error fetching training V2";
+        try {
+          const err = await res.json();
+          errMsg = err.detail || errMsg;
+        } catch {}
+        setError(errMsg);
+        return;
+      }
+
+      const data = await res.json();
+      setResult(data);
+    } catch (e) {
+      setError("Server unreachable");
+    }
+  }
+
+  return (
+    <div className="p-6 space-y-4">
+      <h2 className="text-2xl font-bold">ML Training V2</h2>
+
+      <button
+        onClick={runTraining}
+        className="bg-blue-600 text-white px-4 py-2 rounded"
+      >
+        Execute
+      </button>
+
+      {error && (
+        <div className="text-red-600 font-semibold mt-4">{error}</div>
+      )}
+
+      {result && (
+        <div className="border p-4 rounded mt-4 space-y-2">
+          <div><strong>Model Name:</strong> {result.model_name}</div>
+          <div><strong>Dataset Size:</strong> {result.dataset_size}</div>
+          <div><strong>Status:</strong> {result.status}</div>
+          <div><strong>Accuracy:</strong> {result.accuracy}%</div>
+          <div><strong>Loss:</strong> {result.loss}</div>
+          <div><strong>Last Trained:</strong> {result.last_trained}</div>
+          <div><strong>Epochs:</strong> {result.epochs}</div>
+          <div><strong>Training Time (min):</strong> {result.training_time_minutes}</div>
+
+          <h3 className="font-semibold text-xl mt-4">Logs</h3>
+          {result.logs?.map((log, idx) => (
+            <div key={idx} className="border p-2 rounded bg-gray-100">
+              {log}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
