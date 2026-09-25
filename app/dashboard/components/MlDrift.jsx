@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -25,30 +26,57 @@ export default function MlDrift() {
   const [stopTime, setStopTime] = useState(100);
   const [threshold, setThreshold] = useState(0.1);
 
-  const [timeData, setTimeData] = useState([]);
-  const [freqData, setFreqData] = useState([]);
-  const [driftData, setDriftData] = useState([]);
+  const [timeData, setTimeData] = useState<number[]>([]);
+  const [freqData, setFreqData] = useState<number[]>([]);
+  const [driftData, setDriftData] = useState<number[]>([]);
 
-  const [baseFreq, setBaseFreq] = useState(null);
-  const [currentFreq, setCurrentFreq] = useState(null);
+  const [baseFreq, setBaseFreq] = useState<number | null>(null);
+  const [currentFreq, setCurrentFreq] = useState<number | null>(null);
 
   const [running, setRunning] = useState(false);
-  const intervalRef = useRef(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loadingInit, setLoadingInit] = useState(false);
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const initSweep = async () => {
-    const res = await fetch(
-      `http://127.0.0.1:8000/sensor/live_init?start_time=${startTime}&stop_time=${stopTime}`
-    );
-    const data = await res.json();
-    setBaseFreq(data.base_frequency_hz);
+    setLoadingInit(true);
+    setError(null);
+
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/sensor/live_init?start_time=${startTime}&stop_time=${stopTime}`;
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        let msg = "Error initializing sweep";
+        try {
+          const err = await res.json();
+          msg = err.detail || msg;
+        } catch {}
+        setError(msg);
+        setLoadingInit(false);
+        return;
+      }
+
+      const data = await res.json();
+      setBaseFreq(data.base_frequency_hz);
+    } catch {
+      setError("Backend unreachable — live_init failed.");
+    }
+
+    setLoadingInit(false);
   };
 
   const startLiveSweep = async () => {
     await initSweep();
+
+    if (error) return;
+
     setTimeData([]);
     setFreqData([]);
     setDriftData([]);
     setCurrentFreq(null);
+
     setRunning(true);
   };
 
@@ -64,24 +92,40 @@ export default function MlDrift() {
     if (!running) return;
 
     const fetchTick = async () => {
-      const res = await fetch(
-        `http://127.0.0.1:8000/sensor/live_tick?threshold=${threshold}`
-      );
-      const data = await res.json();
+      try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/sensor/live_tick?threshold=${threshold}`;
+        const res = await fetch(url);
 
-      if (data.done) {
+        if (!res.ok) {
+          let msg = "Error during live_tick";
+          try {
+            const err = await res.json();
+            msg = err.detail || msg;
+          } catch {}
+          setError(msg);
+          stopLiveSweep();
+          return;
+        }
+
+        const data = await res.json();
+
+        if (data.done) {
+          setCurrentFreq(data.measured_frequency_hz);
+          stopLiveSweep();
+          return;
+        }
+
+        setTimeData((prev) => [...prev, data.time_s]);
+        setFreqData((prev) => [...prev, data.measured_frequency_hz]);
+        setDriftData((prev) => [...prev, data.drift_hz]);
         setCurrentFreq(data.measured_frequency_hz);
+
+        if (baseFreq === null) {
+          setBaseFreq(data.base_frequency_hz);
+        }
+      } catch {
+        setError("Backend unreachable — live_tick failed.");
         stopLiveSweep();
-        return;
-      }
-
-      setTimeData((prev) => [...prev, data.time_s]);
-      setFreqData((prev) => [...prev, data.measured_frequency_hz]);
-      setDriftData((prev) => [...prev, data.drift_hz]);
-      setCurrentFreq(data.measured_frequency_hz);
-
-      if (baseFreq === null) {
-        setBaseFreq(data.base_frequency_hz);
       }
     };
 
@@ -193,7 +237,7 @@ export default function MlDrift() {
 
       <button
         onClick={startLiveSweep}
-        disabled={running}
+        disabled={running || loadingInit}
         style={{
           padding: "10px 20px",
           backgroundColor: running ? "#6c757d" : "#007bff",
@@ -205,7 +249,7 @@ export default function MlDrift() {
           marginRight: "10px"
         }}
       >
-        Start Live Sweep
+        {loadingInit ? "Initializing..." : "Start Live Sweep"}
       </button>
 
       <button
@@ -222,6 +266,12 @@ export default function MlDrift() {
       >
         Stop
       </button>
+
+      {error && (
+        <div style={{ color: "red", marginTop: "20px", fontWeight: "bold" }}>
+          {error}
+        </div>
+      )}
 
       <div style={{ marginTop: "20px", marginBottom: "20px" }}>
         <p>

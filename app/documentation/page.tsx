@@ -1,7 +1,12 @@
 "use client";
 
+interface DocItem {
+  title: string;
+  url: string;
+}
+
 export default function DocumentationPage() {
-  const docs = [
+  const docs: DocItem[] = [
     {
       title: "backend_frontend_architecture_docs",
       url: "https://your-vercel-blob-url/backend_frontend_architecture_docs.pdf",

@@ -61,6 +61,63 @@ export default function Profile() {
           </p>
         </div>
       </div>
+
+      {/* EDUCATION & CERTIFICATIONS SECTION */}
+      <div className="mt-12 space-y-8">
+        <h2 className="text-3xl font-bold text-center mb-6">
+          Education & Certifications
+        </h2>
+
+        <div className="space-y-6 text-lg leading-relaxed">
+          <div>
+            <h3 className="text-xl font-semibold">
+              DeepLearning.AI – Coursera (October 2025)
+            </h3>
+            <p>
+              Certified Specialist in <strong>Deep Learning and LLM Applications</strong> using Python
+            </p>
+            <ul className="list-disc ml-6 mt-2 space-y-1">
+              <li>Specialized in Prompt Engineering through OpenAI with LLM.</li>
+              <li>Designed and coded an interactive dashboard with transaction-based visualizations and dynamic filtering.</li>
+              <li>Developed Python-based automation for data extraction, analysis, and graphical display.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold">
+              Data Science Infinity (August 2025)
+            </h3>
+            <p>
+              Certified <strong>Data Analyst Specialist</strong> – Python & SQL
+            </p>
+            <ul className="list-disc ml-6 mt-2 space-y-1">
+              <li>Retrieved and processed financial datasets from MySQL relational databases.</li>
+              <li>Conducted customer loyalty analysis for over 1M customers based on proximity to retail locations.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold">
+              Northern Alberta Institute of Technology (NAIT), 2021–2024
+            </h3>
+            <p>Diploma in <strong>Nanosystem Engineering Technology</strong></p>
+            <ul className="list-disc ml-6 mt-2 space-y-1">
+              <li>Specialized in nanosystems data preparation, statistical analysis, and visualization using JMP, Origin, and Excel.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold">
+              Alabama A&M University, Huntsville, AL, USA (2002–2007)
+            </h3>
+            <p>Ph.D. in <strong>Applied Physics – Materials Science</strong></p>
+            <ul className="list-disc ml-6 mt-2 space-y-1">
+              <li>Focused on materials characterization, data analytics, and modeling.</li>
+              <li>Conducted quantitative analysis using JMP, Origin, and Excel.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

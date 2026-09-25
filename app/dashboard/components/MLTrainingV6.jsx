@@ -1,28 +1,49 @@
 "use client";
+
 import { useState } from "react";
 
 export default function MLTrainingV6() {
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   async function runTraining() {
     setError(null);
     setResult(null);
+    setLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/dashboard/ml/train/v6");
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/dashboard/ml/train/v6`;
+
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!res.ok) {
-        const err = await res.json();
-        setError(err.detail || "Error fetching training V6");
+        let errMsg = "Error fetching training V6";
+
+        try {
+          const err = await res.json();
+          errMsg = err.detail || errMsg;
+        } catch {
+          // ignore JSON parse errors
+        }
+
+        setError(errMsg);
+        setLoading(false);
         return;
       }
 
       const data = await res.json();
       setResult(data);
     } catch (e) {
-      setError("Server unreachable");
+      setError("Server unreachable — backend may be offline.");
     }
+
+    setLoading(false);
   }
 
   return (
@@ -35,6 +56,12 @@ export default function MLTrainingV6() {
       >
         Execute
       </button>
+
+      {loading && (
+        <div className="text-gray-700 font-medium mt-4">
+          Running training… please wait.
+        </div>
+      )}
 
       {error && (
         <div className="text-red-600 font-semibold mt-4">{error}</div>
@@ -52,7 +79,7 @@ export default function MLTrainingV6() {
           <div><strong>Training Time (min):</strong> {result.training_time_minutes}</div>
 
           <h3 className="font-semibold text-xl mt-4">Logs</h3>
-          {result.logs.map((log, idx) => (
+          {result.logs?.map((log, idx) => (
             <div key={idx} className="border p-2 rounded bg-gray-100">
               {log}
             </div>

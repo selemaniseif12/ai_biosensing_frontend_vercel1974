@@ -1,34 +1,49 @@
 "use client";
+
 import { useState } from "react";
 
 export default function MLTrainingV2() {
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   async function runTraining() {
     setError(null);
     setResult(null);
+    setLoading(true);
 
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}/dashboard/ml/train/v2`;
 
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!res.ok) {
         let errMsg = "Error fetching training V2";
+
         try {
           const err = await res.json();
           errMsg = err.detail || errMsg;
-        } catch {}
+        } catch {
+          // ignore JSON parse errors
+        }
+
         setError(errMsg);
+        setLoading(false);
         return;
       }
 
       const data = await res.json();
       setResult(data);
     } catch (e) {
-      setError("Server unreachable");
+      setError("Server unreachable — backend may be offline.");
     }
+
+    setLoading(false);
   }
 
   return (
@@ -41,6 +56,12 @@ export default function MLTrainingV2() {
       >
         Execute
       </button>
+
+      {loading && (
+        <div className="text-gray-700 font-medium mt-4">
+          Running training… please wait.
+        </div>
+      )}
 
       {error && (
         <div className="text-red-600 font-semibold mt-4">{error}</div>
