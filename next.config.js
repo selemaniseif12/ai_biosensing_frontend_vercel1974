@@ -5,6 +5,7 @@ const nextConfig = {
     serverActions: {
       allowedOrigins: ["localhost:3000"],
     },
+    turbo: false, // Disable Turbopack to fix PostCSS/Tailwind build crash
   },
 };
 
