@@ -17,13 +17,16 @@
     "@nextui-org/react": "^2.6.11",
     "@stripe/react-stripe-js": "^6.8.0",
     "@stripe/stripe-js": "^9.12.0",
+    "autoprefixer": "^10.4.16",
     "axios": "^1.6.0",
     "chart.js": "^4.5.1",
     "firebase": "^10.7.0",
+    "firebase-admin": "^14.5.0",
     "framer-motion": "^12.42.2",
     "next": "14.2.3",
     "pdfjs-dist": "2.16.105",
     "plotly.js": "^3.7.0",
+    "postcss": "^8.4.31",
     "react": "18.2.0",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "18.2.0",
@@ -31,10 +34,7 @@
     "react-plotly.js": "^4.0.0",
     "recharts": "^3.8.1",
     "stripe": "^12.18.0",
-
-    "tailwindcss": "^3.4.1",
-    "postcss": "^8.4.31",
-    "autoprefixer": "^10.4.16"
+    "tailwindcss": "^3.4.1"
   },
   "devDependencies": {
     "@types/node": "^20",
