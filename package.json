@@ -20,6 +20,7 @@
     "axios": "^1.6.0",
     "chart.js": "^4.5.1",
     "firebase": "^10.7.0",
+    "firebase-admin": "^14.5.0",
     "framer-motion": "^12.42.2",
     "next": "14.2.3",
     "pdfjs-dist": "2.16.105",
