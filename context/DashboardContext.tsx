@@ -1,12 +1,17 @@
-"use client";
+import { createContext, useState, ReactNode } from "react";
 
-import { createContext, useContext, useState } from "react";
+interface DashboardContextType {
+  selectedVirus: any | null;
+  setSelectedVirus: React.Dispatch<React.SetStateAction<any | null>>;
+  filters: Record<string, any>;
+  setFilters: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+}
 
-const DashboardContext = createContext(null);
+export const DashboardContext = createContext<DashboardContextType | null>(null);
 
-export function DashboardProvider({ children }) {
-  const [selectedVirus, setSelectedVirus] = useState(null);
-  const [filters, setFilters] = useState({});
+export const DashboardProvider = ({ children }: { children: ReactNode }) => {
+  const [selectedVirus, setSelectedVirus] = useState<any | null>(null);
+  const [filters, setFilters] = useState<Record<string, any>>({});
 
   return (
     <DashboardContext.Provider
@@ -15,8 +20,4 @@ export function DashboardProvider({ children }) {
       {children}
     </DashboardContext.Provider>
   );
-}
-
-export function useDashboardContext() {
-  return useContext(DashboardContext);
-}
+};
