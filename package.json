@@ -20,7 +20,6 @@
     "axios": "^1.6.0",
     "chart.js": "^4.5.1",
     "firebase": "^10.7.0",
-    "firebase-admin": "^14.5.0",
     "framer-motion": "^12.42.2",
     "next": "14.2.3",
     "pdfjs-dist": "2.16.105",
@@ -31,18 +30,19 @@
     "react-pdf": "5.7.2",
     "react-plotly.js": "^4.0.0",
     "recharts": "^3.8.1",
-    "stripe": "^12.18.0"
+    "stripe": "^12.18.0",
+
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.31",
+    "autoprefixer": "^10.4.16"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "autoprefixer": "^10.4.16",
     "concurrently": "^10.0.5",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.2.3",
-    "postcss": "^8.4.31",
-    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   }
 }
