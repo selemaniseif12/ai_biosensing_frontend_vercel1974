@@ -6,7 +6,7 @@
     "dev": "next dev",
     "backend": "cd \"C:/Users/selem/Desktop/AI_BIOSENSING_BACKEND\" && \"C:/Users/selem/Desktop/AI_BIOSENSING_BACKEND/venv/Scripts/python.exe\" -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000",
     "frontend": "next dev",
-    "build": "next build --no-turbo",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
@@ -21,7 +21,7 @@
     "chart.js": "^4.5.1",
     "firebase": "^10.7.0",
     "framer-motion": "^12.42.2",
-    "next": "^16.2.11",
+    "next": "14.2.3",
     "pdfjs-dist": "2.16.105",
     "plotly.js": "^3.7.0",
     "react": "18.2.0",
