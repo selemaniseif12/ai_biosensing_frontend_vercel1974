@@ -1,9 +1,10 @@
-import admin from "firebase-admin";
+import { initializeApp, applicationDefault, getApps } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
+if (!getApps().length) {
+  initializeApp({
+    credential: applicationDefault(),
   });
 }
 
-export default admin;
+export const auth = getAuth();
