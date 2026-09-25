@@ -48,7 +48,8 @@ import VCE100V6Dashboard from "./components/VCE100V6Dashboard.jsx";
 import VCE100CompareDashboard from "./components/VCE100CompareDashboard.jsx";
 
 /* ML Drift */
-import MlDrift from "./components/MlDrift.jsx";
+import MlDrift from "./components/MlDrift";
+
 
 /* Probability vs Flow Rate */
 import VirusProbabilityFlowChart from "./components/VirusProbabilityFlowChart.jsx";
