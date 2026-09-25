@@ -1,26 +1,23 @@
-"use client";
+import { createContext, useState, ReactNode } from "react";
 
-import { createContext, useContext, useState } from "react";
-import { login } from "@/services/auth/authService";
+interface AuthContextType {
+  user: any | null;
+  signIn: (email: string, password: string) => Promise<any>;
+}
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<any | null>(null);
 
-  async function signIn(email, password) {
-    const result = await login(email, password);
-    if (result) setUser(result.user);
-    return result;
-  }
+  const signIn = async (email: string, password: string) => {
+    // your login logic here
+    return Promise.resolve();
+  };
 
   return (
     <AuthContext.Provider value={{ user, signIn }}>
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuthContext() {
-  return useContext(AuthContext);
-}
+};
