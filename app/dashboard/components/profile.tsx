@@ -1,21 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Profile() {
-  const [image, setImage] = useState<string | null>(null);
-
-  useEffect(() => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/app/profile/image`;
-
-    fetch(url)
-      .then((res) => res.text())
-      .then((base64) => {
-        setImage(`data:image/jpeg;base64,${base64}`);
-      })
-      .catch((err) => console.error("Error loading profile image:", err));
-  }, []);
-
   return (
     <div className="max-w-5xl mx-auto p-8">
       <h1 className="text-3xl font-bold text-center mb-8">
@@ -24,17 +11,17 @@ export default function Profile() {
         Piezo‑Pico to Femtotechnology Sensors Inc.
       </h1>
 
-      {/* IMAGE LEFT, TEXT RIGHT, NO EMPTY SPACE */}
       <div className="flex flex-col md:flex-row md:items-start md:gap-8">
-        {image && (
-          <div className="flex-shrink-0 mb-6 md:mb-0">
-            <img
-              src={image}
-              alt="Profile"
-              className="w-48 h-48 rounded-xl shadow-lg object-cover"
-            />
-          </div>
-        )}
+        <div className="flex-shrink-0 mb-6 md:mb-0">
+          <Image
+            src="/profile.png"
+            alt="Profile"
+            width={220}
+            height={220}
+            className="rounded-xl shadow-lg object-cover"
+            priority
+          />
+        </div>
 
         <div className="text-lg leading-relaxed space-y-6">
           <p>
